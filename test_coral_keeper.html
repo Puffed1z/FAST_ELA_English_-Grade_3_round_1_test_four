@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Grade 3 FAST ELA – The Coral Keeper</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{font-size:16px;height:100%}
+body{font-family:Georgia,'Times New Roman',serif;background:#e8eaf0;color:#111;height:100%;display:flex;flex-direction:column;overflow:hidden}
+button{font-family:inherit;cursor:pointer;touch-action:manipulation;-webkit-appearance:none}
+#topBar{background:#fff;border-bottom:2px solid #bbb;padding:5px 14px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;font-size:13px}
+#topBar .title{font-weight:bold;font-size:13px;flex:1;min-width:180px}
+#topBar .user{font-size:11.5px;color:#555;white-space:nowrap}
+#helpBtn{background:#1a4fa0;color:#fff;border:none;border-radius:4px;padding:2px 10px;font-size:12px;font-weight:bold}
+#teacherBtn{background:#7a3a00;color:#fff;border:none;border-radius:4px;padding:2px 10px;font-size:12px;font-weight:bold;cursor:pointer}
+#toolbar{background:#fff;border-bottom:2px solid #ccc;padding:4px 10px;display:flex;align-items:center;gap:5px;flex-shrink:0;flex-wrap:wrap}
+.tbtn{display:flex;flex-direction:column;align-items:center;gap:1px;background:none;border:none;font-size:10px;color:#333;padding:3px 6px;border-radius:4px;min-height:38px;justify-content:center}
+.tbtn:hover{background:#eee}
+.tbtn svg{width:19px;height:19px}
+.tbtn.nav-t{background:#e4f0e4;border:1px solid #5a9a5a}
+.tbtn.save-t{background:#e4f0e4;border:1px solid #5a9a5a}
+.tbtn.pause-t{background:#fff3e0;border:1px solid #d4861a}
+#tbSpacer{flex:1}
+#qStrip{background:#fff;border-bottom:1px solid #ccc;padding:4px 10px;display:flex;align-items:center;gap:3px;flex-shrink:0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.qDot{min-width:32px;height:32px;border:1.5px solid #aaa;background:#fff;border-radius:4px;font-size:11.5px;font-weight:bold;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .12s;position:relative}
+.qDot:hover{background:#dde8ff}
+.qDot.active{background:#1a4fa0;color:#fff;border-color:#1a4fa0}
+.qDot.done::after{content:'✓';position:absolute;bottom:1px;right:2px;font-size:7px;color:#2a8a2a;line-height:1}
+.qDot.active.done::after{color:#90ee90}
+#main{display:flex;flex:1 1 0;min-height:0;overflow:hidden}
+#passagePanel{width:44%;min-width:250px;background:#fff;border-right:3px solid #ccc;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:16px 18px;line-height:1.75;font-size:14px;flex-shrink:0;height:100%}
+#passagePanel h2{text-align:center;font-size:16.5px;margin-bottom:2px}
+#passagePanel .byl{text-align:center;font-style:italic;color:#555;margin-bottom:12px;font-size:13px}
+.pNum{float:left;width:28px;font-weight:bold;color:#444;font-size:12.5px;margin-top:2px;font-family:Arial,sans-serif}
+.pBlk{margin-left:28px;margin-bottom:8px;display:block;font-style:italic}
+.pLine{display:block}
+.src{font-size:11.5px;color:#666;margin-top:10px;font-style:italic}
+.gloss{background:#fffbe6;border:1px solid #e6c800;border-radius:4px;padding:5px 9px;margin:8px 0;font-size:12.5px}
+#qPanel{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;background:#fff;height:100%}
+#qHeader{background:#1a4fa0;color:#fff;padding:7px 14px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0}
+#qNum{font-size:21px;font-weight:bold}
+#qMenuBtn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:4px;padding:3px 8px;font-size:16px}
+#qMeta{padding:3px 14px;font-size:11px;color:#666;border-bottom:1px solid #e0e0e0;background:#fafafa;display:flex;gap:10px;flex-shrink:0}
+#qBody{flex:1 1 0;overflow-y:scroll;-webkit-overflow-scrolling:touch;padding:14px 16px;min-height:0}
+.qPrompt{font-size:14.5px;line-height:1.5;margin-bottom:14px}
+.qPrompt strong{font-weight:bold}
+.qExcerpt{background:#f4f6fa;border-left:3px solid #1a4fa0;padding:9px 13px;margin-bottom:13px;font-style:italic;line-height:1.6;border-radius:0 4px 4px 0;font-size:14px}
+.partLabel{font-weight:bold;color:#1a4fa0;margin-bottom:6px;font-size:14.5px}
+.partDivider{border:none;border-top:2px dashed #ccc;margin:16px 0}
+.choices{display:flex;flex-direction:column;gap:8px}
+.choice{display:flex;align-items:flex-start;gap:10px;padding:10px 13px;border:1.5px solid #ccc;border-radius:6px;cursor:pointer;transition:all .13s;background:#fff;text-align:left;width:100%;font-size:14.5px;line-height:1.45;font-family:Georgia,serif;min-height:46px}
+.choice:hover{background:#eef2ff;border-color:#7090d0}
+.choice.sel{background:#dde8ff;border-color:#1a4fa0}
+.choice.correct{background:#d4f5d4;border-color:#2a8a2a}
+.choice.wrong{background:#ffd8d8;border-color:#cc3333}
+.choice:disabled{cursor:default}
+.cMarker{width:17px;height:17px;border:2px solid #999;border-radius:50%;flex-shrink:0;margin-top:2px;background:#fff;display:flex;align-items:center;justify-content:center}
+.choice.sel .cMarker{background:#1a4fa0;border-color:#1a4fa0}
+.choice.sel .cMarker::after{content:'';width:6px;height:6px;background:#fff;border-radius:50%;display:block}
+.cMarker.chk{border-radius:3px}
+.choice.sel .cMarker.chk::after{content:'\2713';font-size:10px;color:#fff;font-weight:bold;border-radius:0;width:auto;height:auto;background:none}
+.cLetter{font-weight:bold;color:#1a4fa0;min-width:19px;font-size:14.5px}
+.tblQ{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:5px}
+.tblQ th{background:#1a4fa0;color:#fff;padding:7px 9px;text-align:center;border:1px solid #aaa;font-weight:bold}
+.tblQ td{border:1px solid #bbb;padding:7px 9px;text-align:center;vertical-align:middle}
+.tblQ td:first-child{text-align:left;font-weight:bold;font-size:13px}
+.tblQ tr:nth-child(even) td{background:#f0f4ff}
+.tblBub{width:20px;height:20px;border:2px solid #888;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;cursor:pointer;background:#fff;transition:all .13s;font-size:11.5px;font-weight:bold;color:#555}
+.tblBub:hover{border-color:#1a4fa0;background:#eef}
+.tblBub.sel{background:#1a4fa0;border-color:#1a4fa0;color:#fff}
+.tblBub.correct{background:#2a8a2a;border-color:#2a8a2a;color:#fff}
+.tblBub.wrong{background:#cc3333;border-color:#cc3333;color:#fff}
+.feedback{margin-top:12px;padding:12px 14px;border-radius:6px;font-size:13.5px;line-height:1.5}
+.feedback.ok{background:#d4f5d4;border:1px solid #2a8a2a;color:#1a5c1a}
+.feedback.bad{background:#ffd8d8;border:1px solid #cc3333;color:#7a0000}
+#botNav{padding:9px 16px;background:#f2f2f4;border-top:1px solid #ddd;display:flex;justify-content:space-between;align-items:center;flex-shrink:0}
+.navBtn{background:#1a4fa0;color:#fff;border:none;padding:10px 24px;border-radius:5px;font-size:14px;font-weight:bold;min-height:44px;min-width:84px;transition:background .13s}
+.navBtn:hover{background:#153d80}
+.navBtn:active{background:#0e2d60}
+.navBtn:disabled{background:#aaa;cursor:default}
+#saveInfo{font-size:11.5px;color:#666;text-align:center}
+#toast{position:fixed;bottom:70px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,.76);color:#fff;padding:8px 20px;border-radius:22px;font-size:14px;z-index:9999;opacity:0;pointer-events:none;white-space:nowrap;transition:opacity .25s;font-family:Arial,sans-serif}
+#notesOverlay{display:none;position:fixed;inset:0;z-index:800;background:rgba(0,0,0,.45)}
+#notesBox{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:10px;width:min(500px,92vw);max-height:70vh;display:flex;flex-direction:column;box-shadow:0 8px 32px rgba(0,0,0,.35)}
+#notesHeader{background:#1a4fa0;color:#fff;padding:10px 16px;border-radius:10px 10px 0 0;display:flex;justify-content:space-between;align-items:center;font-weight:bold;font-size:15px}
+#notesClose{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:4px;padding:3px 10px;font-size:16px;cursor:pointer}
+#notesArea{flex:1;padding:14px;overflow-y:auto}
+#notesTxt{width:100%;height:180px;border:1.5px solid #ccc;border-radius:6px;padding:10px;font-family:Georgia,serif;font-size:14px;resize:vertical;outline:none}
+#notesFooter{padding:10px 14px;border-top:1px solid #eee;display:flex;justify-content:flex-end;gap:8px}
+.nBtn{padding:8px 18px;border:none;border-radius:5px;font-size:14px;font-weight:bold;cursor:pointer}
+#notesClear{background:#f0f0f0;color:#333}
+#notesSave{background:#1a4fa0;color:#fff}
+#lrBar{display:none;position:fixed;left:0;right:0;z-index:700;height:36px;background:rgba(255,220,0,.35);border-top:2px solid rgba(200,160,0,.5);border-bottom:2px solid rgba(200,160,0,.5);pointer-events:none}
+#lrControls{position:fixed;bottom:80px;left:50%;transform:translateX(-50%);z-index:710;background:#1a4fa0;border-radius:24px;padding:6px 14px;display:none;gap:10px;align-items:center;box-shadow:0 4px 16px rgba(0,0,0,.3)}
+.lrBtn{background:rgba(255,255,255,.2);border:none;color:#fff;border-radius:16px;padding:5px 14px;font-size:13px;font-weight:bold;cursor:pointer}
+#lrCloseBtn{background:rgba(255,100,100,.4)}
+@media(max-width:820px){body{overflow:hidden}#main{flex-direction:column;overflow:hidden;height:100%}#passagePanel{width:100%;height:45%;max-height:45%;border-right:none;border-bottom:3px solid #ccc;overflow-y:scroll;-webkit-overflow-scrolling:touch;flex-shrink:0}#qPanel{height:55%;max-height:55%;flex-shrink:0}#qBody{overflow-y:scroll;-webkit-overflow-scrolling:touch}}
+@media(max-width:580px){#topBar .title{font-size:11px}.tbtn{font-size:9px;padding:2px 4px}#passagePanel{font-size:13px;padding:10px 12px;height:42%;max-height:42%}#qPanel{height:58%;max-height:58%}.qPrompt,.choice{font-size:13.5px}}
+</style>
+</head>
+<body>
+<div id="topBar">
+  <span class="title">Grade 3 FAST ELA Reading &nbsp;|&nbsp; The Coral Keeper</span>
+  <span class="user">GUEST, STUDENT &nbsp; GUEST SESSION</span>
+  <button id="helpBtn">?</button>
+  <button id="teacherBtn" onclick="teacherAccess()">Teacher</button>
+</div>
+
+<div id="toolbar">
+  <button class="tbtn nav-t" onclick="goBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><polyline points="12,8 8,12 12,16"/><line x1="16" y1="12" x2="8" y2="12"/></svg>Back</button>
+  <button class="tbtn nav-t" onclick="goNext()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="12" cy="12" r="10"/><polyline points="12,8 16,12 12,16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>Next</button>
+  <button class="tbtn save-t" onclick="doSave()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>Save</button>
+  <button class="tbtn pause-t"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="10" y1="15" x2="10" y2="9"/><line x1="14" y1="15" x2="14" y2="9"/></svg>Pause</button>
+  <div id="tbSpacer"></div>
+  <button class="tbtn" onclick="openNotes()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4z"/></svg>Notes</button>
+  <button class="tbtn" onclick="toggleLR()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>Line Reader</button>
+  <button class="tbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>Zoom Out</button>
+  <button class="tbtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>Zoom In</button>
+</div>
+
+<div id="qStrip"></div>
+<div id="main">
+  <div id="passagePanel">
+<h2>The Coral Keeper</h2>
+<div class="byl">by M. J. Carroll</div>
+<div class="gloss"><strong>resilient:</strong> able to recover quickly from difficulties; strong and flexible</div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">1</span><span class="pBlk">When the coral reef near the island of Pua began to bleach white, the fishing families were frightened. Without the reef, the fish would go. Without the fish, the families would have nothing to sell or eat. Everyone said the same thing: the reef was dying.</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">2</span><span class="pBlk">But eleven-year-old Sela did not believe the reef was dead yet. She had grown up swimming through it — she knew every brain coral and sea fan the way other children knew their own bedrooms.</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">3</span><span class="pBlk">"It's stressed," she told her grandmother. "It turned white because the water got too warm. But some of the coral is still alive underneath. I can see it moving."</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">4</span><span class="pBlk">Her grandmother listened carefully. "What does it need?"</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">5</span><span class="pBlk">"Time. And less disturbance. And maybe new pieces." Sela had read about coral gardening — attaching small living fragments to underwater frames so they could grow and help restore a damaged reef. She asked the village council for permission to try.</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">6</span><span class="pBlk">Most of the adults listened politely but said nothing would work. One elder, though, Mr. Puna, said quietly: "The reef has been here longer than any of us. It knows how to survive. Help it remember."</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">7</span><span class="pBlk">Sela spent the summer collecting living fragments from the healthier parts of the reef, attaching them to wire frames with the help of her younger brother Kito. The work was slow. The frames were awkward. Some fragments died.</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">8</span><span class="pBlk">But by autumn, patches of color had begun to return to the reef — small blushes of pink and orange and green among the white. The water temperature had dropped, and the coral was recovering.</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">9</span><span class="pBlk">"You were right," her grandmother said when they snorkeled over it together. "It was only sleeping."</span></div>
+<div style="margin-bottom:8px;display:flex;"><span class="pNum">10</span><span class="pBlk">Sela looked at the returning color. She thought of every fragment she had placed, every frame, every early morning in the water. "It's <strong>resilient</strong>," she said. "We just had to give it a chance."</span></div>
+<div class="src">"The Coral Keeper" by M. J. Carroll. Original work.</div>
+</div>
+  <div id="qPanel">
+    <div id="qHeader"><span id="qNum">1</span><button id="qMenuBtn">&#x2630;</button></div>
+    <div id="qMeta"><span>GUEST, STUDENT</span><span id="saveTime"></span></div>
+    <div id="qBody"></div>
+    <div id="botNav">
+      <button class="navBtn" id="btnBack" onclick="goBack()">&#x25C4; Back</button>
+      <div id="saveInfo">Not yet saved</div>
+      <button class="navBtn" id="btnNext" onclick="goNext()">Next &#x25BA;</button>
+    </div>
+  </div>
+</div>
+
+<div id="notesOverlay" onclick="if(event.target===this)closeNotes()">
+  <div id="notesBox">
+    <div id="notesHeader"><span>&#x1F4DD; My Notes</span><button id="notesClose" onclick="closeNotes()">&#x2715;</button></div>
+    <div id="notesArea"><textarea id="notesTxt" placeholder="Type your notes here..."></textarea></div>
+    <div id="notesFooter"><button class="nBtn" id="notesClear" onclick="clearNotes()">Clear</button><button class="nBtn" id="notesSave" onclick="saveNotes()">Save &amp; Close</button></div>
+  </div>
+</div>
+<div id="lrBar"></div>
+<div id="lrControls">
+  <button class="lrBtn" onclick="lrMove(-30)">&#x25B2; Up</button>
+  <button class="lrBtn" onclick="lrMove(30)">&#x25BC; Down</button>
+  <button class="lrBtn" id="lrCloseBtn" onclick="toggleLR()">&#x2715; Close</button>
+</div>
+<div id="toast"></div>
+
+<script>
+let cur=0,reviewMode=false,lastAttempt=null;
+const answers={};
+const Qs=[
+  {id:1,type:'mc',
+   prompt:'What is the central idea of "The Coral Keeper"?',
+   choices:['Coral reefs are too fragile to survive in warm ocean water.','A young person\'s knowledge and persistence can help restore something others have given up on.','Fishing communities depend entirely on healthy coral reefs to survive.','Scientists have discovered a new way to grow coral that always works.'],
+   correct:1,
+   explain:'Most adults believe the reef is dying and nothing can be done. Sela refuses to accept this — she knows the reef, designs a plan, and spends the whole summer working to restore it. When the color returns, her persistence and knowledge are proven right. The central idea is about one person\'s refusal to give up on something others have abandoned.'
+  },
+  {id:2,type:'mc',
+   excerpt:'"she knew every brain coral and sea fan the way other children knew their own bedrooms." (paragraph 2)',
+   prompt:'What does this sentence show about Sela?',
+   choices:['She has studied coral reefs in school textbooks.','She is so familiar with the reef that it feels like home to her.','She never spends time on land because she prefers to swim.','She has memorized the scientific names of all the coral species.'],
+   correct:1,
+   explain:'Knowing your bedroom means knowing it completely, comfortably, and intuitively — without having to think about it. By comparing Sela\'s knowledge of the reef to how children know their bedrooms, the author shows that the reef is deeply familiar and personal to her — like home.'
+  },
+  {id:3,type:'mc',
+   excerpt:'"The reef has been here longer than any of us. It knows how to survive. Help it remember." (paragraph 6)',
+   prompt:'What does Mr. Puna mean by <strong>"help it remember"</strong>?',
+   choices:['He wants Sela to teach the coral to recognize the villagers.','He believes the reef has natural resilience and just needs help getting started again.','He is saying the coral has memories just like humans do.','He wants Sela to record information about the reef so it is not forgotten.'],
+   correct:1,
+   explain:'"Help it remember" means help the reef access its own natural ability to recover. Mr. Puna is saying the reef already knows how to survive — it has been doing so for longer than humans have been here. Sela\'s job is not to save it but to give it the conditions it needs to save itself.'
+  },
+  {id:4,type:'multi',
+   prompt:'Select <strong>two</strong> details that show Sela\'s plan is based on <strong>real knowledge and effort</strong>.',
+   choices:['Sela had read about coral gardening and asked the village council for permission to try.','Most adults listened politely but said nothing would work.','Sela and Kito spent the summer collecting fragments and attaching them to wire frames.','Some of the coral fragments Sela attached died during the summer.','By autumn, patches of color had returned to the reef.'],
+   correct:[0,2],
+   explain:'Choice A shows Sela has done research — she knows about coral gardening from reading and has a real plan. Choice C shows the effort required — a whole summer of difficult, slow, physical work. Together these show her plan is grounded in knowledge and executed with real effort.'
+  },
+  {id:5,type:'partAB',
+   partA:{
+    prompt:'What does Sela\'s grandmother\'s response in paragraph 9 show about how her view has changed?',
+    choices:['She was always confident Sela\'s plan would work and is not surprised.','She was doubtful at first but is now convinced by the evidence of the recovering reef.','She is surprised that the reef recovered but thinks it had nothing to do with Sela\'s work.','She is still uncertain about whether the reef will fully recover.'],
+    correct:1
+   },
+   partB:{
+    prompt:'Which detail from the passage best supports the answer in Part A?',
+    choices:[
+      '"Her grandmother listened carefully." (paragraph 4)',
+      '"Most of the adults listened politely but said nothing would work." (paragraph 6)',
+      '"You were right," her grandmother said when they snorkeled over it together." (paragraph 9)',
+      '"It was only sleeping." (paragraph 9)'
+    ],
+    correct:2
+   },
+   explain:'The grandmother listened carefully but did not commit to believing earlier. Her direct statement "You were right" in paragraph 9 shows she has now been fully convinced by the evidence. Part B: this is the clearest evidence of her changed view — a direct acknowledgment that Sela was correct.'
+  },
+  {id:6,type:'mc',
+   prompt:'How does the passage develop the theme that <strong>nature can recover when given the right conditions and time</strong>?',
+   choices:['by describing how the fishing families moved away from the island while the reef recovered','by showing that Sela\'s careful work and the drop in water temperature together allow the reef to return','by explaining that scientists from a university came to help restore the reef','by showing that the reef fully recovered in just a few weeks after Sela began her work'],
+   correct:1,
+   explain:'Two things happen together: the water temperature drops naturally, and Sela\'s work provides new fragments and reduces disturbance. Neither alone would have been enough — it is the combination of natural conditions improving and human care that allows the reef to recover. The theme is built through this combination.'
+  },
+  {id:7,type:'mc',
+   prompt:'What is the meaning of <u>resilient</u> as used in paragraph 10 and defined in the glossary?',
+   choices:['very colorful and bright after recovering','easily damaged by small changes in temperature','able to recover quickly from difficulties; strong and flexible','no longer alive but preserved in its original form'],
+   correct:2,
+   explain:'"Resilient" means able to recover from difficulties — flexible and strong. Sela uses it to describe the coral\'s ability to bounce back once given the right conditions. The glossary at the top of the passage defines this word directly.'
+  },
+  {id:8,type:'multi',
+   prompt:'Select <strong>two</strong> sentences that should be included in a summary of this passage.',
+   choices:['When the coral reef bleaches white, the fishing community fears it is dying and all will be lost.','Sela knows the reef well and believes it is stressed but still alive, so she develops a plan to help it recover.','Sela asks the village council for permission to try coral gardening.','Sela and her brother Kito spend the summer attaching coral fragments to wire frames.','By autumn, patches of color return to the reef, showing that Sela\'s plan is working.'],
+   correct:[1,4],
+   explain:'Choice B captures both the conflict and Sela\'s central action — her belief and her plan. Choice E is the resolution — the reef\'s color returning proves the plan is working. Together they show the complete arc of the story.'
+  },
+  {id:9,type:'mc',
+   prompt:'How does Sela change from the beginning to the end of the passage?',
+   choices:['From someone who is afraid of the reef dying to someone who accepts that nature sometimes cannot be saved.','From a girl with a belief and a plan to someone whose work is proven right by the reef\'s recovery.','From someone who disagrees with the village adults to someone who learns to respect their experience.','From a casual swimmer in the reef to a trained marine scientist who studies it professionally.'],
+   correct:1,
+   explain:'At the start Sela has a belief (the reef is not dead) and a plan (coral gardening). By the end, the patches of color returning confirm both. Her change is not emotional or relational — it is the journey from an unproven idea to demonstrated truth.'
+  },
+  {id:10,type:'table',
+   prompt:'Fill in the bubbles to show the different viewpoints of the characters in the passage.',
+   rows:[
+    {label:'believes the reef is stressed but still alive and can be helped to recover',cols:['Sela','Grandmother','Most adults'],correct:0},
+    {label:'is doubtful at first but changes their view when the reef begins to recover',cols:['Sela','Grandmother','Most adults'],correct:1},
+    {label:'listens politely but believes nothing will work',cols:['Sela','Grandmother','Most adults'],correct:2}
+   ],
+   explain:'Sela believes the reef is still alive and can recover — her entire plan is based on this belief. The grandmother listens carefully early on but is not fully convinced until she sees the evidence — "You were right." Most adults listen politely but say nothing will work.'
+  },
+  {id:11,type:'mc',
+   prompt:'Which sentence from the passage best shows that Sela\'s work has a meaningful impact on the community?',
+   choices:[
+     '"She had grown up swimming through it." (paragraph 2)',
+     '"She asked the village council for permission to try." (paragraph 5)',
+     '"The work was slow. The frames were awkward. Some fragments died." (paragraph 7)',
+     '"By autumn, patches of color had begun to return to the reef." (paragraph 8)'
+   ],
+   correct:3,
+   explain:'The return of color to the reef is the moment the community\'s fear is answered. The fishing families who feared losing everything now have evidence that the reef is recovering. This sentence is the turning point that affects not just Sela but the entire community that depends on the reef.'
+  }
+];
+
+function isCorrect(q,a){if(a===undefined||a===null)return false;if(q.type==='mc')return a===q.correct;if(q.type==='multi')return[...a].sort().join()===[...q.correct].sort().join();if(q.type==='partAB')return a&&a.a===q.partA.correct&&a.b===q.partB.correct;if(q.type==='table'||q.type==='table2')return q.rows.every((_,ri)=>a&&a[ri]===q.rows[ri].correct);return false}
+function isAnswered(q,a){if(a===undefined||a===null)return false;if(q.type==='multi')return a.length>0;if(q.type==='partAB')return a&&a.a!==undefined&&a.b!==undefined;if(q.type==='table'||q.type==='table2')return Object.keys(a).length>=q.rows.length;return true}
+function renderStrip(){const s=document.getElementById('qStrip');s.innerHTML='';if(reviewMode)return;Qs.forEach((q,i)=>{const d=document.createElement('button');d.className='qDot'+(i===cur?' active':'')+(isAnswered(q,answers[i])?' done':'');d.textContent=q.id;d.onclick=()=>{cur=i;render();};s.appendChild(d);})}
+function renderQ(q,idx,rev){const a=answers[idx];let h='';
+if(q.type==='mc'){if(q.excerpt)h+=`<div class="qExcerpt">${q.excerpt}</div>`;h+=`<div class="qPrompt">${q.prompt}</div><div class="choices">`;q.choices.forEach((c,i)=>{let cl=a===i?' sel':'';if(rev)cl=i===q.correct?' correct':(a===i?' wrong':'');h+=`<button class="choice${cl}" ${rev?'disabled':''} onclick="pMC(${idx},${i})"><div class="cMarker"></div><span class="cLetter">&#${9398+i};</span><span>${c}</span></button>`;});h+='</div>';}
+else if(q.type==='multi'){h+=`<div class="qPrompt">${q.prompt}</div><div class="choices">`;const sel=a||[];q.choices.forEach((c,i)=>{let cl=sel.includes(i)?' sel':'';if(rev)cl=q.correct.includes(i)?' correct':(sel.includes(i)?' wrong':'');h+=`<button class="choice${cl}" ${rev?'disabled':''} onclick="pMulti(${idx},${i})"><div class="cMarker chk"></div><span>${c}</span></button>`;});h+='</div>';}
+else if(q.type==='partAB'){h+=`<div class="partLabel">Part A</div><div class="qPrompt">${q.partA.prompt}</div><div class="choices">`;q.partA.choices.forEach((c,i)=>{let cl=(a&&a.a===i)?' sel':'';if(rev)cl=i===q.partA.correct?' correct':((a&&a.a===i)?' wrong':'');h+=`<button class="choice${cl}" ${rev?'disabled':''} onclick="pA(${idx},${i})"><div class="cMarker"></div><span class="cLetter">&#${9398+i};</span><span>${c}</span></button>`;});h+=`</div><hr class="partDivider"><div class="partLabel">Part B</div><div class="qPrompt">${q.partB.prompt}</div><div class="choices">`;q.partB.choices.forEach((c,i)=>{let cl=(a&&a.b===i)?' sel':'';if(rev)cl=i===q.partB.correct?' correct':((a&&a.b===i)?' wrong':'');h+=`<button class="choice${cl}" ${rev?'disabled':''} onclick="pB(${idx},${i})"><div class="cMarker"></div><span class="cLetter">&#${9398+i};</span><span>${c}</span></button>`;});h+='</div>';}
+else if(q.type==='table'||q.type==='table2'){h+=`<div class="qPrompt">${q.prompt}</div><table class="tblQ"><thead><tr><th></th>`;q.rows[0].cols.forEach(c=>{h+=`<th>${c}</th>`;});h+=`</tr></thead><tbody>`;const tA=a||{};q.rows.forEach((row,ri)=>{h+=`<tr><td>${row.label}</td>`;row.cols.forEach((c,ci)=>{const sel=tA[ri]===ci;const ltr=String.fromCharCode(65+ri*row.cols.length+ci);let cl=sel?' sel':'';if(rev)cl=ci===row.correct?' correct':(sel?' wrong':'');const clk=rev?'':` onclick="pTbl(${idx},${ri},${ci})"`;h+=`<td><span class="tblBub${cl}"${clk}>${ltr}</span></td>`;});h+='</tr>';});h+='</tbody></table>';}
+if(rev){const ok=isCorrect(q,a);h+=`<div class="feedback ${ok?'ok':'bad'}">${ok?'<strong>\u2713 Correct!</strong> ':'<strong>\u2717 Not quite.</strong> '}${q.explain}</div>`;}
+return h;}
+function render(){if(reviewMode){renderReview(lastAttempt);return;}renderStrip();const q=Qs[cur];document.getElementById('qNum').textContent=q.id;document.getElementById('btnBack').disabled=cur===0;const isLast=cur===Qs.length-1;const btn=document.getElementById('btnNext');btn.textContent=isLast?'Submit \u25ba':'Next \u25ba';btn.style.background=isLast?'#2a8a2a':'';const body=document.getElementById('qBody');body.innerHTML=renderQ(q,cur,false);body.scrollTop=0;}
+const TEST_ID=document.title.replace(/[^a-zA-Z0-9]/g,'_');
+const LOG_KEY='fastela_log_'+TEST_ID;
+const TEACHER_PIN='1234';
+function teacherAccess(){const pin=prompt('Enter teacher PIN to view attempt log:');if(pin===null)return;if(pin===TEACHER_PIN){showTeacherLog();}else{alert('Incorrect PIN. Please try again.');}}
+(function(){const k={};document.addEventListener('keydown',e=>{k[e.key.toUpperCase()]=true;if(k['T']&&k['E']&&k['A'])teacherAccess();});document.addEventListener('keyup',e=>{delete k[e.key.toUpperCase()];});})();
+function getLog(){try{return JSON.parse(localStorage.getItem(LOG_KEY)||'[]');}catch(e){return[];}}
+function saveAttempt(score,total,snap){const log=getLog();const a={attemptNum:log.length+1,timestamp:new Date().toISOString(),score,total,pct:Math.round(score/total*100),answers:snap};log.push(a);localStorage.setItem(LOG_KEY,JSON.stringify(log));return a;}
+function showTeacherLog(){const log=getLog();if(!log.length){alert('No attempts recorded yet for:\n'+TEST_ID);return;}let msg='=== ATTEMPT LOG ===\n'+TEST_ID+'\n\n';log.forEach(a=>{const d=new Date(a.timestamp);msg+=`Attempt #${a.attemptNum}  |  ${d.toLocaleDateString()} ${d.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}  |  Score: ${a.score}/${a.total} (${a.pct}%)\n`;});if(log.length>1){msg+='\n\u26a0\ufe0f  '+log.length+' attempts submitted.';if(log[log.length-1].score>log[0].score)msg+='\n\u26a0\ufe0f  Score improved: '+log[0].score+'/'+log[0].total+' \u2192 '+log[log.length-1].score+'/'+log[log.length-1].total;}alert(msg);}
+function renderReview(attemptData){document.getElementById('qStrip').innerHTML='';document.getElementById('qNum').textContent='\u2713';const bB=document.getElementById('btnBack'),bN=document.getElementById('btnNext');bB.textContent='\uD83D\uDD12 Locked';bB.disabled=true;bB.style.background='#aaa';bN.textContent='Done \u2713';bN.style.background='#555';bN.onclick=()=>showToast('Test complete. Your answers have been recorded.');const{score,total,pct,attemptNum,timestamp}=attemptData;const band=pct>=80?'#90ff90':pct>=60?'#ffd080':'#ff9090';let h=`<div style="background:#1a4fa0;color:#fff;padding:16px;border-radius:8px;margin-bottom:20px;"><div style="font-size:17px;font-weight:bold;margin-bottom:4px;">Test Complete \u2014 Attempt #${attemptNum}</div><div style="font-size:32px;font-weight:bold;color:${band}">${score} / ${total}</div><div style="font-size:13px;margin-top:3px;opacity:.9;">${pct}% correct &nbsp;\u00b7&nbsp; ${new Date(timestamp).toLocaleDateString()} ${new Date(timestamp).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div><div style="margin-top:10px;padding:8px 12px;background:rgba(255,255,255,.15);border-radius:6px;font-size:12.5px;line-height:1.6;">\uD83D\uDD12 Your answers are now locked and cannot be changed.<br>${attemptNum>1?`<span style="color:#ffd080;font-weight:bold;">\u26a0\ufe0f This is attempt #${attemptNum}. Your teacher can see all attempts.</span>`:'Your teacher has a record of this submission.'}</div></div><div style="padding:8px 12px;background:#fff8e1;border:1px solid #f0c040;border-radius:6px;margin-bottom:16px;font-size:13px;color:#7a5800;">\uD83D\uDCD6 <strong>Review below</strong> \u2014 read the explanations for any questions you missed.</div>`;Qs.forEach((q,i)=>{const ok=isCorrect(q,answers[i]);const tl=q.type==='mc'?'Multiple Choice':q.type==='multi'?'Select Two':q.type==='partAB'?'Part A / Part B':'Bubble Table';h+=`<div style="margin-bottom:22px;padding:13px;border:2px solid ${ok?'#2a8a2a':'#cc3333'};border-radius:8px;background:${ok?'#f6fff6':'#fff6f6'}"><div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;flex-wrap:wrap;"><span style="background:${ok?'#2a8a2a':'#cc3333'};color:#fff;font-weight:bold;font-size:13px;padding:3px 10px;border-radius:20px;">Q${q.id} \u2014 ${ok?'\u2713 Correct':'\u2717 Incorrect'}</span><span style="font-size:12px;color:#555;font-style:italic;">${tl}</span></div>${renderQ(q,i,true)}</div>`;});const body=document.getElementById('qBody');body.innerHTML=h;body.scrollTop=0;stamp();}
+function pMC(idx,i){answers[idx]=i;if(!reviewMode)render();}
+function pA(idx,i){if(!answers[idx])answers[idx]={};answers[idx].a=i;if(!reviewMode)render();}
+function pB(idx,i){if(!answers[idx])answers[idx]={};answers[idx].b=i;if(!reviewMode)render();}
+function pMulti(idx,i){if(!answers[idx])answers[idx]=[];const p=answers[idx].indexOf(i);p===-1?answers[idx].push(i):answers[idx].splice(p,1);if(!reviewMode)render();}
+function pTbl(idx,ri,ci){if(!answers[idx])answers[idx]={};answers[idx][ri]=ci;if(!reviewMode)render();}
+function goBack(){if(reviewMode){showToast('\uD83D\uDD12 Test submitted \u2014 answers are locked.');return;}if(cur>0){cur--;render();}}
+function goNext(){if(reviewMode){showToast('\uD83D\uDD12 Test complete. Answers are locked.');return;}if(cur<Qs.length-1){cur++;render();return;}const miss=Qs.filter((q,i)=>!isAnswered(q,answers[i])).length;if(miss>0){showToast(`${miss} question(s) not yet answered.`);return;}if(!confirm('Submit your test? Your answers will be LOCKED and cannot be changed after this.'))return;reviewMode=true;const score=Qs.filter((q,i)=>isCorrect(q,answers[i])).length;lastAttempt=saveAttempt(score,Qs.length,JSON.parse(JSON.stringify(answers)));renderReview(lastAttempt);}
+function stamp(){const t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});document.getElementById('saveTime').textContent='Last Saved: '+t;document.getElementById('saveInfo').textContent='Last saved: '+t;}
+function doSave(){stamp();showToast('Saved!');}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.style.opacity='1';clearTimeout(t._t);t._t=setTimeout(()=>t.style.opacity='0',2600);}
+const NOTES_KEY='fastela_notes_'+TEST_ID;
+function openNotes(){document.getElementById('notesTxt').value=localStorage.getItem(NOTES_KEY)||'';document.getElementById('notesOverlay').style.display='block';}
+function closeNotes(){document.getElementById('notesOverlay').style.display='none';}
+function saveNotes(){localStorage.setItem(NOTES_KEY,document.getElementById('notesTxt').value);closeNotes();}
+function clearNotes(){document.getElementById('notesTxt').value='';}
+let lrActive=false,lrY=200;
+function toggleLR(){lrActive=!lrActive;const bar=document.getElementById('lrBar');const ctrl=document.getElementById('lrControls');if(lrActive){bar.style.display='block';bar.style.top=(lrY-18)+'px';ctrl.style.display='flex';}else{bar.style.display='none';ctrl.style.display='none';}}
+function lrMove(dy){lrY=Math.max(60,Math.min(window.innerHeight-60,lrY+dy));document.getElementById('lrBar').style.top=(lrY-18)+'px';}
+document.addEventListener('touchstart',function(e){if(!lrActive)return;const bar=document.getElementById('lrBar');const ty=e.touches[0].clientY;if(Math.abs(ty-(parseFloat(bar.style.top||'200')+18))<40){function onMove(ev){lrY=ev.touches[0].clientY;bar.style.top=(lrY-18)+'px';}function onEnd(){document.removeEventListener('touchmove',onMove);document.removeEventListener('touchend',onEnd);}document.addEventListener('touchmove',onMove);document.addEventListener('touchend',onEnd);}},{passive:true});
+
+render();
+</script>
+</body>
+</html>
